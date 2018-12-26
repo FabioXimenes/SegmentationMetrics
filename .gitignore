@@ -1,0 +1,9 @@
+# Ignore this folders
+segmentation/
+dermatologist/
+venv/
+.idea/
+
+
+# Ignore this files
+results.txt
