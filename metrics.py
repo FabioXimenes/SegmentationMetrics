@@ -56,6 +56,18 @@ def calculate_metric(name, confusion_matrix):
         return specificity(confusion_matrix)
     elif name == 'Acc':
         return accuracy(confusion_matrix)
+    elif name == 'Ppv':
+        return ppv(confusion_matrix)
+    elif name == 'Npv':
+        return npv(confusion_matrix)
+    elif name == 'Fpr':
+        return fpr(confusion_matrix)
+    elif name == 'Fdr':
+        return fdr(confusion_matrix)
+    elif name == 'Fnr':
+        return fnr(confusion_matrix)
+    elif name == 'F1-Score':
+        return f1_score(confusion_matrix)
 
 
 def jaccard_index(confusion_matrix):
@@ -125,12 +137,73 @@ def specificity(confusion_matrix):
     return tn/(tn + fp)
 
 
-def f_measure(confusion_matrix):
+def f1_score(confusion_matrix):
     """
 
     :param confusion_matrix:
     :return:
     """
-    # TODO
 
-    pass
+    tp, tn, fp, fn = confusion_matrix
+
+    return 2*tp/(2*tp + fp + fn)
+
+
+def ppv(confusion_matrix):
+    """
+
+    :param confusion_matrix:
+    :return:
+    """
+
+    tp, tn, fp, fn = confusion_matrix
+
+    return tp/(tp + fp)
+
+
+def npv(confusion_matrix):
+    """
+
+    :param confusion_matrix:
+    :return:
+    """
+
+    tp, tn, fp, fn = confusion_matrix
+
+    return tn/(tn + fn)
+
+
+def fpr(confusion_matrix):
+    """
+
+    :param confusion_matrix:
+    :return:
+    """
+
+    tp, tn, fp, fn = confusion_matrix
+
+    return fp/(fp + tn)
+
+
+def fdr(confusion_matrix):
+    """
+
+    :param confusion_matrix:
+    :return:
+    """
+
+    tp, tn, fp, fn = confusion_matrix
+
+    return fp/(fp + tp)
+
+
+def fnr(confusion_matrix):
+    """
+
+    :param confusion_matrix:
+    :return:
+    """
+
+    tp, tn, fp, fn = confusion_matrix
+
+    return fn/(fn + tp)

@@ -39,13 +39,13 @@ if len(segmentedPaths) != len(gtPaths):
     print('The number of images to be compared must be of the same size!')
     exit()
 
-metrics_list = ['Jac', 'Mcc', 'Dice', 'Acc', 'Sen', 'Spe']
+metrics_list = ['Jac', 'Mcc', 'Dice', 'Acc', 'Sen', 'Spe', 'Ppv', 'Npv', 'Fpr', 'Fdr', 'Fnr', 'F1-Score']
 
 
 with open('results.txt', 'w') as file:
     for metric in metrics_list:
         file.write(metric)
-        file.write(', ')
+        file.write(','.ljust(24))
     file.write('\n')
 
 # Load the images, compute the confusion matrix and calculate the metrics
@@ -54,10 +54,9 @@ for (i, images) in enumerate(zip(segmentedPaths, gtPaths)):
     segmented = cv2.imread(images[0], 0)
     gt = cv2.imread(images[1], 0)
 
-    # Verify if the segmented and ground truth images have the same size
-
     segmented = cv2.resize(segmented, (gt.shape[1], gt.shape[0]))
 
+    # Verify if the segmented and ground truth images have the same size
     if segmented.shape != gt.shape:
         print('The sizes of segmented image and ground truth image must be the same!')
         pass
@@ -78,7 +77,6 @@ for (i, images) in enumerate(zip(segmentedPaths, gtPaths)):
 
     with open('results.txt', 'a') as f:
         for value in values:
-            f.write(str(value))
-            f.write(', ')
+            f.write('{:.5f}'.format(value))
+            f.write(','.ljust(20))
         f.write('\n')
-

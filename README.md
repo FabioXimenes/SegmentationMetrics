@@ -16,6 +16,13 @@ This is a repository that contains code written in python for calculating the ke
  * Jaccard Index
  * Dice Coefficient
  * Matthew Correlation Coefficient
+ * Precision
+ * Negative Predictive Value
+ * False Positive Rate
+ * False Discovery Rate
+ * False Negative Rate
+ * F1-Score
+ 
  
  ### Usage:
  Separate your images into two folders. One folder must contain the images segmented by your method, and the other folder must contain
