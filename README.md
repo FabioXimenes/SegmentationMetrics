@@ -37,5 +37,5 @@ This is a repository that contains code written in python for calculating the ke
  segmented by the specialist. 
  
  ### Output
- The metrics will be printed on a .txt file named results.
+ The metrics will be printed in a 'results.txt' file.
  

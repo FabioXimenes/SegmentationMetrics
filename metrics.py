@@ -1,7 +1,7 @@
 from numba import njit
+from functools import reduce
 
 # The numba package speeds up the access of the pixel inside the for loops.
-# Also, the decorator njit is used to
 
 
 @njit
@@ -14,7 +14,7 @@ def get_confusion_matrix(segmented, ground_truth):
     (TP, TN, FP, FN).
     """
 
-    # TODO - normalize the images to have pixel values between 0 and
+    # TODO - normalize the images to have pixel values between 0 and 1
 
     # Initialize the values of confusion matrix
     tp = tn = fp = fn = 0
@@ -31,7 +31,20 @@ def get_confusion_matrix(segmented, ground_truth):
             elif segmented[col, row] == 0 and ground_truth[col, row] == 255:
                 fn += 1
 
-    return (tp, tn, fp, fn)
+    return tp, tn, fp, fn
+
+
+def get_metrics(metrics_lst, dict_values, confusion_matrix):
+
+    if not dict_values:
+        for metric in metrics_lst:
+            dict_values[metric] = list()
+
+    for metric in metrics_lst:
+        if metric in dict_values:
+            dict_values[metric].append(calculate_metric(metric, confusion_matrix))
+
+    return dict_values
 
 
 def calculate_metric(name, confusion_matrix):
@@ -68,6 +81,15 @@ def calculate_metric(name, confusion_matrix):
         return fnr(confusion_matrix)
     elif name == 'F1-Score':
         return f1_score(confusion_matrix)
+
+
+def mean(data):
+
+    for metric in data.keys():
+        metric_values = data[metric]
+        value = reduce(lambda x, y: x + y, metric_values)/len(metric_values)
+
+        yield value
 
 
 def jaccard_index(confusion_matrix):

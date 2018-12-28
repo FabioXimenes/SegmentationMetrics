@@ -41,16 +41,14 @@ if len(segmentedPaths) != len(gtPaths):
 
 metrics_list = ['Jac', 'Mcc', 'Dice', 'Acc', 'Sen', 'Spe', 'Ppv', 'Npv', 'Fpr', 'Fdr', 'Fnr', 'F1-Score']
 
-
-with open('results.txt', 'w') as file:
-    for metric in metrics_list:
-        file.write(metric)
-        file.write(','.ljust(24))
-    file.write('\n')
+# Create a dictionary that will contain all the metrics as keys and their respective values for each image
+dict_values = {}
 
 # Load the images, compute the confusion matrix and calculate the metrics
 print('Loading the images...')
 for (i, images) in enumerate(zip(segmentedPaths, gtPaths)):
+    print('Image {}/{}'.format(i + 1, len(segmentedPaths)))
+
     segmented = cv2.imread(images[0], 0)
     gt = cv2.imread(images[1], 0)
 
@@ -61,8 +59,6 @@ for (i, images) in enumerate(zip(segmentedPaths, gtPaths)):
         print('The sizes of segmented image and ground truth image must be the same!')
         pass
 
-    print('Image {}/{}'.format(i + 1, len(segmentedPaths)))
-
     # Threshold the images to be sure that the pixel values are binary
     ret, segmented = cv2.threshold(segmented, 127, 255, cv2.THRESH_BINARY)
     ret, gt = cv2.threshold(gt, 127, 255, cv2.THRESH_BINARY)
@@ -70,13 +66,24 @@ for (i, images) in enumerate(zip(segmentedPaths, gtPaths)):
     # Get the confusion matrix of the image
     confusion_matrix = metrics.get_confusion_matrix(segmented, gt)
 
-    values = []
+    # Calculate all the metrics and put them into a dictionary
+    dict_values = metrics.get_metrics(metrics_list, dict_values, confusion_matrix)
 
-    for metric in metrics_list:
-        values.append(metrics.calculate_metric(metric, confusion_matrix))
-
-    with open('results.txt', 'a') as f:
-        for value in values:
+# Print the metrics for each image
+with open('results.txt', 'w') as f:
+    for metric in dict_values.keys():
+        f.write(metric.ljust(10))
+        for value in dict_values[metric]:
             f.write('{:.5f}'.format(value))
-            f.write(','.ljust(20))
+            f.write(','.ljust(10))
+        f.write('\n')
+
+# Print the mean of each metric for all images
+with open('results.txt', 'a') as f:
+    # Calculate the mean of each metric
+    mean_values = metrics.mean(dict_values)
+    f.write('\n\nMean Values: \n\n')
+    for metric, mean in zip(dict_values.keys(), mean_values):
+        f.write(metric.ljust(10))
+        f.write('{:.5f}'.format(mean))
         f.write('\n')
