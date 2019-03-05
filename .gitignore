@@ -1,9 +1,10 @@
-# Ignore this folders
+# Ignore these folders
 segmentation/
 dermatologist/
 venv/
 .idea/
 
 
-# Ignore this files
-results.txt
+# Ignore these files
+*.txt
+*.csv
