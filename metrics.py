@@ -168,7 +168,7 @@ def f1_score(confusion_matrix):
 
     tp, tn, fp, fn = confusion_matrix
 
-    return 2*tp/(2*tp + fp + fn)
+    return 2 * (tp/(tp + fp))*(tp/(tp + fn))/(tp/(tp + fp) + tp/(tp + fn))
 
 
 def ppv(confusion_matrix):
